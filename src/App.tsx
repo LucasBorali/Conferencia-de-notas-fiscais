@@ -1,11 +1,10 @@
 
 import './App.css'
+import ConfereNota from './pages/ConfereNota'
 
 function App() {
   return (
-    <div>
-      <h1>Consulta de Nota Fiscal</h1>
-    </div>
+   <ConfereNota />
   )
 }
 

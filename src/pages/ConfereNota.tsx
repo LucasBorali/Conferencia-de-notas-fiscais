@@ -1,4 +1,8 @@
 import { useState } from "react"
+import type { DocumentoFiscal } from "../models/DocumentoFiscal"
+import type { ItemNota } from "../models/ItemNota"
+import { parseXmlToItemNota } from "../utils/xmlFunctions"
+import ConferenciaNota from "../components/ConferenciaNota"
 
 
 const ConfereNota = () => {
@@ -6,38 +10,54 @@ const ConfereNota = () => {
 
     const [chave, setChave] = useState('')
     const [pesquisando, setPesquisando] = useState(false)
+    const [documento, setDocumento] = useState<DocumentoFiscal | null>(null)
+    const [items, setItems] = useState<ItemNota[]>([])
 
-    const buscarNota = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault()
+  
+const buscarNota = async (e: React.FormEvent<HTMLFormElement>) => {
+  e.preventDefault()
 
+  if (!chave.trim()) {
+    return
+  }
 
-        if (!chave.trim()){
-            return
-        }
-    
+  setPesquisando(true)
 
-        setPesquisando(true)
+  try {
+    const response = await fetch(
+      `/api/Documentos?pesquisa=${encodeURIComponent(chave.trim())}`
+    )
 
-    try {
-      const response = await fetch(
-        `/api/Documentos?pesquisa=${encodeURIComponent(chave.trim())}`
-      )
-
-      if (!response.ok) {
-        throw new Error('Erro ao consultar a API')
-      }
-
-      const documento = await response.json()
-
-      console.log(documento)
-    } catch (error) {
-      console.error(error)
-    } finally {
-      setPesquisando(false)
+    if (!response.ok) {
+      throw new Error('Erro ao consultar a API')
     }
 
+    const documentos: DocumentoFiscal[] = await response.json()
 
+    const documentoEncontrado = documentos[0] || null
+
+    setDocumento(documentoEncontrado)
+
+    if (documentoEncontrado?.xmlString) {
+      const itens = parseXmlToItemNota(documentoEncontrado.xmlString)
+      
+
+      setItems(itens)
+
+    } else {
+      setItems([])
     }
+
+  } catch (error) {
+    console.error(error)
+    setDocumento(null)
+    setItems([])
+  } finally {
+    setPesquisando(false)
+  }
+}
+
+
 
 
   return (
@@ -61,10 +81,11 @@ const ConfereNota = () => {
           </button>
         </div>
       </form>
-
-      <section>
-        <p>Nenhuma nota consultada.</p>
-      </section>
+{documento ? (
+  <ConferenciaNota items={items} setItems={setItems} />
+) : (
+  <p>Nenhuma nota consultada.</p>
+)}
     </main>
   )
 }

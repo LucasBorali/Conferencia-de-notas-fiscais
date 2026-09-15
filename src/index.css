@@ -1,3 +1,10 @@
+:root{
+  --Background: #FFFFFC;
+  --fontColor: #191716;
+  --Red: #FF0613;
+  --buttonBG: #469DDD;
+  --buttonBGhover: #020A85;
+}
 * {
   box-sizing: border-box;
 }
@@ -11,35 +18,32 @@ body,
 
 body {
   font-family: Arial, sans-serif;
-  background: #f5f5f5;
+  background: var(--Background);
+  color: var(--fontColor);
 }
 
-main {
-  max-width: 900px;
-  margin: 0 auto;
-  padding: 40px 20px;
+.badge div{
+  width: 0; 
+  height: 0; 
+  border-right: 70vw solid transparent;
+  border-top: 20vh solid var(--Red);
+  position: absolute;
+  top: 0;
+  z-index: -1;
 }
 
-h1 {
-  margin-bottom: 30px;
+.badge img {
+  position: absolute;
+  top: 0;
+  margin: 5px 15px;
+  width: 40px;
+  z-index: 1;
 }
 
-label {
-  display: block;
-  margin-bottom: 8px;
-  font-weight: bold;
-}
-
-input {
+ 
+input{
   width: 100%;
-  padding: 10px;
+  height: 2rem;
+  max-width: 400px;
 }
 
-button {
-  padding: 10px 20px;
-  cursor: pointer;
-}
-
-section {
-  margin-top: 30px;
-}

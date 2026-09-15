@@ -3,6 +3,7 @@ import type { DocumentoFiscal } from "../models/DocumentoFiscal"
 import type { ItemNota } from "../models/ItemNota"
 import { parseXmlToItemNota } from "../utils/xmlFunctions"
 import ConferenciaNota from "../components/ConferenciaNota"
+import classes from "./ConfereNota.module.css"
 
 
 const ConfereNota = () => {
@@ -61,17 +62,28 @@ const buscarNota = async (e: React.FormEvent<HTMLFormElement>) => {
 
 
   return (
-    <main>
-      <h1>Conferência de Nota Fiscal</h1>
+    <main >
+
+
+      
+{documento ? (
+  <ConferenciaNota items={items} setItems={setItems} />
+) : (
+  <div>
+    {pesquisando ? (
+      <span className={classes["loader"]} />
+    ) : (
+      <div className={classes["confere-nota"]}>
+         <h1>Conferência de Nota Fiscal</h1>
 
       <form onSubmit={buscarNota}>
-        <label htmlFor="chave">Chave de acesso</label>
+        
 
         <div>
           <input
             id="chave"
             type="text"
-            placeholder="Digite a chave da NF-e..."
+            placeholder="Insira a chave da NF-e..."
             value={chave}
             onChange={(e) => setChave(e.target.value)}
           />
@@ -81,10 +93,10 @@ const buscarNota = async (e: React.FormEvent<HTMLFormElement>) => {
           </button>
         </div>
       </form>
-{documento ? (
-  <ConferenciaNota items={items} setItems={setItems} />
-) : (
-  <p>Nenhuma nota consultada.</p>
+      </div>
+    )}
+   
+  </div>
 )}
     </main>
   )

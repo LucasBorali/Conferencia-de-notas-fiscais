@@ -1,6 +1,7 @@
 import { useState } from "react"
 import type { ItemNota } from "../models/ItemNota"
 import { parseEtiqueta } from "../utils/etiquetaFunctions"
+import classes from "./ConferenciaNota.module.css"
 
 interface ConferenciaNotaProps {
   items: ItemNota[]
@@ -19,7 +20,7 @@ const ConferenciaNota = ({ items, setItems }: ConferenciaNotaProps   ) => {
   }
 
   const etiquetaLida = parseEtiqueta(etiqueta)
-  console.log('Etiqueta lida:', etiquetaLida)
+  
 
   if (!etiquetaLida) {
     setEtiqueta('')
@@ -53,35 +54,50 @@ const ConferenciaNota = ({ items, setItems }: ConferenciaNotaProps   ) => {
 }
 
   return (
-     <section>
-      <h2>Nota encontrada</h2>
-
-      <p>
-        Foram encontrados {items.length} itens nesta nota.
-      </p>
-
-      <section>
+     <section className={classes["conferencia-container"]}>
+      
+     
+      
   <h2>Itens da nota</h2>
 
-  {items.map((item, index) => (
-    <div key={index}>
-      <strong>{item.descricao}</strong>
+{items.map(item => {
+  const progresso =
+    Math.min(
+      (item.quantidadeConferida / item.quantidade) * 100,
+      100
+    )
 
-      <div>
-        Código: {item.codigo}
+  const concluido =
+    item.quantidadeConferida >= item.quantidade
+
+  return (
+    <div
+      key={item.codigo}
+      className={`${classes.itemRow} ${
+        concluido ? classes.concluido : ''
+      }`}
+    >
+      <div className={classes.itemInfo}>
+        <span>{item.codigo}</span>
+
+        <span>
+          {item.quantidadeConferida} / {item.quantidade}
+        </span>
       </div>
 
-      <div>
-        {item.quantidadeConferida} / {item.quantidade}
+      <div className={classes.progressBar}>
+        <div
+          className={classes.progress}
+          style={{ width: `${progresso}%` }}
+        />
       </div>
     </div>
-  ))}
+    
+  )
+})}
+<section>
 </section>
 
-      <p>
-        Aponte o coletor para uma etiqueta na caixa
-        para iniciar a conferência.
-      </p>
       <form onSubmit={lerEtiqueta}>
         <input
           type="text"

@@ -1,0 +1,48 @@
+.conferencia-container{
+    display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  margin: 5px;
+
+}
+
+.conferencia-container h2 {
+  margin-bottom: 5px;
+}
+.itemRow {
+  width: 100%;
+  padding: 10px 0;
+  display: flex;
+  flex-direction: column;
+  
+}
+
+.itemInfo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+}
+
+.progressBar {
+  width: 100%;
+  height: 10px;
+  background: #e0e0e0;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.progress {
+  height: 100%;
+  width: 0;
+  background: var(--Red);
+  border-radius: 5px;
+  transition: width 0.3s ease;
+}
+
+.concluido .progress {
+  background: #2e9b4b;
+}

@@ -6,6 +6,7 @@ import ConferenciaNota from "../components/ConferenciaNota"
 import classes from "./ConfereNota.module.css"
 
 
+
 const ConfereNota = () => {
 
 
@@ -14,49 +15,49 @@ const ConfereNota = () => {
     const [documento, setDocumento] = useState<DocumentoFiscal | null>(null)
     const [items, setItems] = useState<ItemNota[]>([])
 
-  
-const buscarNota = async (e: React.FormEvent<HTMLFormElement>) => {
-  e.preventDefault()
 
-  if (!chave.trim()) {
-    return
-  }
+  const buscarNota = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
 
-  setPesquisando(true)
-
-  try {
-    const response = await fetch(
-      `/api/Documentos?pesquisa=${encodeURIComponent(chave.trim())}`
-    )
-
-    if (!response.ok) {
-      throw new Error('Erro ao consultar a API')
+    if (!chave.trim()) {
+      return
     }
 
-    const documentos: DocumentoFiscal[] = await response.json()
+    setPesquisando(true)
 
-    const documentoEncontrado = documentos[0] || null
+    try {
+      const response = await fetch(
+        `/api/Documentos?pesquisa=${encodeURIComponent(chave.trim())}`
+      )
 
-    setDocumento(documentoEncontrado)
+      if (!response.ok) {
+        throw new Error('Erro ao consultar a API')
+      }
 
-    if (documentoEncontrado?.xmlString) {
-      const itens = parseXmlToItemNota(documentoEncontrado.xmlString)
-      
+      const documentos: DocumentoFiscal[] = await response.json()
 
-      setItems(itens)
+      const documentoEncontrado = documentos[0] || null
 
-    } else {
+      setDocumento(documentoEncontrado)
+
+      if (documentoEncontrado?.xmlString) {
+        const itens = parseXmlToItemNota(documentoEncontrado.xmlString)
+        
+
+        setItems(itens)
+
+      } else {
+        setItems([])
+      }
+
+    } catch (error) {
+      console.error(error)
+      setDocumento(null)
       setItems([])
+    } finally {
+      setPesquisando(false)
     }
-
-  } catch (error) {
-    console.error(error)
-    setDocumento(null)
-    setItems([])
-  } finally {
-    setPesquisando(false)
   }
-}
 
 
 
@@ -67,7 +68,7 @@ const buscarNota = async (e: React.FormEvent<HTMLFormElement>) => {
 
       
 {documento ? (
-  <ConferenciaNota items={items} setItems={setItems} />
+  <ConferenciaNota items={items} setItems={setItems} chave={chave}/>
 ) : (
   <div>
     {pesquisando ? (
@@ -91,6 +92,8 @@ const buscarNota = async (e: React.FormEvent<HTMLFormElement>) => {
           <button type="submit">
             Pesquisar
           </button>
+
+          
         </div>
       </form>
       </div>

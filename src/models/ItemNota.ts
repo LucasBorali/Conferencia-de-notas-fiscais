@@ -3,4 +3,6 @@ export interface ItemNota {
     descricao: string
     quantidade: number
     quantidadeConferida: number
+    oc: string
+    cfop: string
 }

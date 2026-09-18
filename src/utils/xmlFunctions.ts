@@ -20,7 +20,8 @@ export const parseXmlToItemNota = (xmlString: string): ItemNota[] => {
         const quantidadeStr = prod.getElementsByTagName("qCom")[0]?.textContent || "0";
         const quantidade = parseFloat(quantidadeStr);
         const quantidadeConferida = 0;
-        items.push({ codigo, descricao, quantidade, quantidadeConferida});
+        const oc = prod.getElementsByTagName("xPed")[0]?.textContent || ""
+        items.push({ codigo, descricao, quantidade, quantidadeConferida, oc, cfop});
       }
      
     }
